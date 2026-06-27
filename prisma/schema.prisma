@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Player {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deviceId  String   @unique
+  name      String   @default("Player")
+  stars     Int      @default(0)
+
+  turtles     CollectedTurtle[]
+  achievements Achievement[]
+  scores      GameScore[]
+  progress    PlayerProgress?
+  setting     Setting?
+  eggs        EasterEgg[]
+}
+
+model CollectedTurtle {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  playerId   String
+  turtleId   String
+  unlockedAt DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, turtleId])
+  @@index([playerId])
+}
+
+model Achievement {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  playerId      String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, achievementId])
+  @@index([playerId])
+}
+
+model GameScore {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  playerId  String
+  gameType  String
+  score     Int
+  highScore Int      @default(0)
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, gameType])
+  @@index([playerId])
+}
+
+model PlayerProgress {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  playerId        String   @unique
+  visitedIslands  String   @default("[]")
+  totalRipples    Int      @default(0)
+  treasureUnlocked Boolean @default(false)
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model Setting {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  playerId     String   @unique
+  theme        String   @default("system")
+  audioEnabled Boolean  @default(true)
+  soundEnabled Boolean  @default(true)
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model EasterEgg {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  playerId  String
+  eggId     String
+  foundAt   DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, eggId])
+  @@index([playerId])
+}
