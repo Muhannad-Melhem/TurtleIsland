@@ -12,9 +12,14 @@ type SoundName =
   | "unlock"
   | "ambient"
 
-const audioContext = typeof AudioContext !== "undefined"
-  ? new AudioContext()
-  : null
+let audioContext: AudioContext | null = null
+if (typeof AudioContext !== "undefined") {
+  try {
+    audioContext = new AudioContext()
+  } catch {
+    audioContext = null
+  }
+}
 
 function playTone(
   ctx: AudioContext,

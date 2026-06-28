@@ -17,6 +17,7 @@ import { DinoMessage } from "@/components/game/dino-message"
 import { UnlockAnimation } from "@/components/game/unlock-animation"
 import { AmbientBackground } from "@/components/game/ambient-background"
 import { TurtleCursor } from "@/components/game/turtle-cursor"
+import { ErrorBoundary } from "@/components/game/error-boundary"
 
 function ViewRenderer() {
   const view = useGameStore((s) => s.view)
@@ -57,7 +58,7 @@ export default function Home() {
   }, [loaded, view, navigate])
 
   return (
-    <>
+    <ErrorBoundary>
       <TurtleCursor />
       <UnlockAnimation />
       <AmbientBackground
@@ -73,6 +74,6 @@ export default function Home() {
           <ViewRenderer key={view} />
         )}
       </AnimatePresence>
-    </>
+    </ErrorBoundary>
   )
 }

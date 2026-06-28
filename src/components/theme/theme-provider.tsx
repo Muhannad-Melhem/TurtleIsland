@@ -41,9 +41,13 @@ function subscribe(callback: () => void) {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window === "undefined") return "system"
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === "light" || stored === "dark" || stored === "system") {
-      return stored
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored === "light" || stored === "dark" || stored === "system") {
+        return stored
+      }
+    } catch {
+      return "system"
     }
     return "system"
   })
@@ -63,7 +67,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t)
-    localStorage.setItem(STORAGE_KEY, t)
+    try {
+      localStorage.setItem(STORAGE_KEY, t)
+    } catch {
+      // localStorage unavailable (private mode, etc.)
+    }
   }, [])
 
   const toggle = useCallback(() => {
