@@ -16,6 +16,15 @@ let audioContext: AudioContext | null = null
 if (typeof AudioContext !== "undefined") {
   try {
     audioContext = new AudioContext()
+    if (audioContext.state === "suspended") {
+      const resume = () => {
+        audioContext?.resume()
+        document.removeEventListener("touchstart", resume)
+        document.removeEventListener("click", resume)
+      }
+      document.addEventListener("touchstart", resume, { once: true })
+      document.addEventListener("click", resume, { once: true })
+    }
   } catch {
     audioContext = null
   }

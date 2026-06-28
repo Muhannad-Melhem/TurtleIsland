@@ -37,6 +37,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{window.__turtleErrors=[];var orig=window.onerror;window.onerror=function(msg,url,line,col,err){window.__turtleErrors.push({msg:msg,url:url,line:line,col:col,err:err?err.stack:""});if(orig)return orig(msg,url,line,col,err)};var r=window.addEventListener;window.addEventListener=function(type,handler,capture){if(type==="error"){var origHandler=handler;handler=function(e){window.__turtleErrors.push({msg:"UnhandledRejection",err:e.reason?e.reason.stack||e.reason:"unknown"});if(origHandler)origHandler(e)};handler._orig=origHandler}return r.call(window,type,handler,capture)};var o=document.createElement("div");o.id="turtle-errors";o.style.cssText="position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(0,0,0,.85);color:#ff6b6b;padding:16px;font-size:13px;font-family:monospace;max-height:40vh;overflow:auto;white-space:pre-wrap;display:none";document.body.appendChild(o)}catch(e){console.error("DIAG:",e)}})();`,
+          }}
+        />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

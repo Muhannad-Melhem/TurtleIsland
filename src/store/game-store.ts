@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
 import type { Rarity } from "@/lib/turtle-data"
 import { turtleDefinitions } from "@/lib/turtle-data"
 
@@ -169,6 +169,29 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: "turtle-island",
+      storage: createJSONStorage(() => ({
+        getItem: (name) => {
+          try {
+            return localStorage.getItem(name)
+          } catch {
+            return null
+          }
+        },
+        setItem: (name, value) => {
+          try {
+            localStorage.setItem(name, value)
+          } catch {
+            // localStorage unavailable (private mode, etc.)
+          }
+        },
+        removeItem: (name) => {
+          try {
+            localStorage.removeItem(name)
+          } catch {
+            // localStorage unavailable
+          }
+        },
+      })),
       partialize: (state) => ({
         turtles: state.turtles,
         achievements: state.achievements,
