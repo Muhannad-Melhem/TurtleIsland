@@ -14,8 +14,15 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Apology",
+  title: "Turtle Island",
   description: "A cozy, magical experience",
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#FFF8ED",
+  maximumScale: 5,
 }
 
 export default function RootLayout({

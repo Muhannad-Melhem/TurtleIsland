@@ -38,13 +38,14 @@ function FloatingFlower({ index }: { index: number }) {
   const [rotateStart] = useState(() => Math.random() * 360)
   const [xDrift] = useState(() => (Math.random() - 0.5) * 80)
   const [rotateAmount] = useState(() => 180 + Math.random() * 180)
+  const [yDistance] = useState(() => Math.random() * 300 + 400)
 
   return (
     <motion.div
       className="absolute pointer-events-none"
       style={{ left: `${x}%`, top: "-5%", fontSize: `${size}rem`, rotate: `${rotateStart}deg` }}
       animate={{
-        y: [0, typeof window !== "undefined" ? window.innerHeight + 100 : 900],
+        y: [0, yDistance],
         x: [0, xDrift],
         rotate: [0, rotateAmount],
         opacity: [0, 1, 1, 0],
